@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+mkdir -p "$ROOT/reports"
+CONFIG="$ROOT/reports/kubeconfig-windows"
+cp "${KUBECONFIG:-$HOME/.kube/config}" "$CONFIG"
+WINDOWS_CONFIG=$(wslpath -w "$CONFIG")
+exec "/mnt/c/Program Files/Docker/Docker/resources/bin/kubectl.exe" --kubeconfig "$WINDOWS_CONFIG" "$@"

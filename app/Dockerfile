@@ -23,6 +23,7 @@ COPY --from=builder /install /usr/local
 RUN rm -rf /usr/local/lib/python3.10/site-packages/setuptools*            /usr/local/lib/python3.10/site-packages/wheel*
 
 COPY app.py config.py ./
+COPY templates ./templates
 
 RUN addgroup -g 10001 appgroup && \
     adduser -D -u 10001 -G appgroup appuser

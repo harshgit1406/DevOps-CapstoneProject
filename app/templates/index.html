@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ data.name }}</title>
+  <style>
+    :root{color-scheme:dark;font-family:Inter,Segoe UI,sans-serif;background:#070b14;color:#e8eefc}*{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(circle at 80% 0,#172554 0,transparent 35%),#070b14}.wrap{max-width:1100px;margin:auto;padding:54px 24px}
+    .top{display:flex;justify-content:space-between;align-items:center}.badge{padding:8px 13px;border:1px solid #235c4d;border-radius:99px;color:#6ee7b7;background:#08241f}
+    .hero{margin:56px 0 32px}.eyebrow{color:#60a5fa;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:700}
+    h1{font-size:clamp(38px,7vw,72px);line-height:1;margin:14px 0;max-width:850px}p{color:#94a3b8;font-size:18px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.card{border:1px solid #1e293b;background:#0d1422cc;border-radius:18px;padding:22px;box-shadow:0 15px 45px #0005}
+    .label{font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:.1em}.value{font-size:23px;margin-top:12px;overflow-wrap:anywhere}
+    .links{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}.links a{color:#dbeafe;text-decoration:none;padding:11px 16px;border-radius:10px;background:#172554;border:1px solid #1d4ed8}
+    .dot{width:9px;height:9px;background:#34d399;display:inline-block;border-radius:50%;margin-right:8px;box-shadow:0 0 15px #34d399}
+    .game{margin-top:34px;display:grid;grid-template-columns:minmax(260px,390px) 1fr;gap:28px;align-items:center;border:1px solid #1e293b;background:linear-gradient(135deg,#0d1422ee,#101a2dee);border-radius:22px;padding:26px;box-shadow:0 18px 55px #0006}
+    .game-copy h2{font-size:32px;margin:8px 0 12px}.game-copy p{font-size:15px;line-height:1.6}.game-kicker{font-size:11px;color:#22d3ee;text-transform:uppercase;letter-spacing:.16em;font-weight:800}
+    .scores{display:flex;gap:10px;margin:20px 0}.score{min-width:76px;padding:11px;border:1px solid #263449;border-radius:12px;background:#0b1220;text-align:center}.score strong{display:block;font-size:20px;margin-top:4px}.score span{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.08em}
+    .game-status{min-height:24px;color:#cbd5e1;font-weight:700}.reset{border:0;border-radius:10px;padding:11px 16px;background:#2563eb;color:white;font-weight:800;cursor:pointer}.reset:hover{background:#3b82f6}
+    .board{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:330px;width:100%;margin:auto}.cell{aspect-ratio:1;border:1px solid #263449;border-radius:15px;background:#111c2f;color:#f8fafc;font-size:clamp(34px,7vw,58px);font-weight:900;cursor:pointer;transition:.18s transform,.18s background,.18s border}.cell:hover:empty{transform:translateY(-2px);background:#172554;border-color:#3b82f6}.cell.x{color:#60a5fa}.cell.o{color:#2dd4bf}.cell.win{background:#12372f;border-color:#34d399;box-shadow:0 0 20px #34d39933}.cell:disabled{cursor:default}
+    @media(max-width:760px){.wrap{padding:32px 18px}.hero{margin:42px 0 26px}.game{grid-template-columns:1fr;padding:20px}.game-copy{text-align:center}.scores{justify-content:center}.board{max-width:300px}}
+  </style>
+</head>
+<body><main class="wrap">
+  <div class="top"><strong>DEV/SEC/OPS</strong><span class="badge"><span class="dot"></span>Operational</span></div>
+  <section class="hero"><div class="eyebrow">Local Kubernetes Platform</div><h1>Ship securely.<br>Observe everything.</h1><p>A lightweight, automated delivery platform running on Kind.</p></section>
+  <section class="grid">
+    <article class="card"><div class="label">Version</div><div class="value">v{{ data.version }}</div></article>
+    <article class="card"><div class="label">Environment</div><div class="value">{{ data.environment }}</div></article>
+    <article class="card"><div class="label">Container</div><div class="value">{{ data.hostname }}</div></article>
+    <article class="card"><div class="label">Uptime</div><div class="value" id="uptime">{{ data.uptime_seconds }}s</div></article>
+  </section>
+  <section class="game" aria-label="Tic-Tac-Toe game">
+    <div class="game-copy">
+      <div class="game-kicker">Mini application</div>
+      <h2>Tic-Tac-Toe</h2>
+      <p>Play a quick round while the DevSecOps platform handles health checks, metrics, scaling, and monitoring behind the scenes.</p>
+      <div class="scores">
+        <div class="score"><span>Player X</span><strong id="score-x">0</strong></div>
+        <div class="score"><span>Draws</span><strong id="score-draw">0</strong></div>
+        <div class="score"><span>Player O</span><strong id="score-o">0</strong></div>
+      </div>
+      <div class="game-status" id="game-status" aria-live="polite">Player X's turn</div>
+      <button class="reset" id="reset-game" type="button">New round</button>
+    </div>
+    <div class="board" id="game-board">
+      <button class="cell" data-cell="0" aria-label="Cell 1"></button><button class="cell" data-cell="1" aria-label="Cell 2"></button><button class="cell" data-cell="2" aria-label="Cell 3"></button>
+      <button class="cell" data-cell="3" aria-label="Cell 4"></button><button class="cell" data-cell="4" aria-label="Cell 5"></button><button class="cell" data-cell="5" aria-label="Cell 6"></button>
+      <button class="cell" data-cell="6" aria-label="Cell 7"></button><button class="cell" data-cell="7" aria-label="Cell 8"></button><button class="cell" data-cell="8" aria-label="Cell 9"></button>
+    </div>
+  </section>
+  <div class="links"><a href="/health">Health</a><a href="/metrics">Metrics</a><a href="{{ data.prometheus_url }}">Prometheus</a><a href="{{ data.grafana_url }}">Grafana</a></div>
+</main><script>
+setInterval(async()=>{const d=await(await fetch('/api/status')).json();document.querySelector('#uptime').textContent=Math.floor(d.uptime_seconds)+'s'},1000);
+const cells=[...document.querySelectorAll('.cell')],statusEl=document.querySelector('#game-status');
+const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+let board=Array(9).fill(''),player='X',active=true,scores={X:0,O:0,draw:0};
+function finish(winner,line=[]){active=false;line.forEach(i=>cells[i].classList.add('win'));if(winner){scores[winner]++;document.querySelector(`#score-${winner.toLowerCase()}`).textContent=scores[winner];statusEl.textContent=`Player ${winner} wins!`;}else{scores.draw++;document.querySelector('#score-draw').textContent=scores.draw;statusEl.textContent="It's a draw!";}cells.forEach(c=>c.disabled=true)}
+function play(e){const i=Number(e.currentTarget.dataset.cell);if(!active||board[i])return;board[i]=player;e.currentTarget.textContent=player;e.currentTarget.classList.add(player.toLowerCase());const line=wins.find(combo=>combo.every(n=>board[n]===player));if(line)return finish(player,line);if(board.every(Boolean))return finish(null);player=player==='X'?'O':'X';statusEl.textContent=`Player ${player}'s turn`;}
+function reset(){board=Array(9).fill('');player='X';active=true;statusEl.textContent="Player X's turn";cells.forEach(c=>{c.textContent='';c.disabled=false;c.className='cell'})}
+cells.forEach(c=>c.addEventListener('click',play));document.querySelector('#reset-game').addEventListener('click',reset);
+</script></body>
+</html>

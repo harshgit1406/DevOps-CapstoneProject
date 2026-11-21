@@ -12,6 +12,8 @@ spec:
       {{- include "devsecops-app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       labels:
         {{- include "devsecops-app.selectorLabels" . | nindent 8 }}
         {{- include "devsecops-app.labels" . | nindent 8 }}
